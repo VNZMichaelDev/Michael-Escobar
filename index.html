@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07070d">
+  <meta name="description" content="Michael Escobar — Full-Stack Developer & Diseñador Gráfico. Sistemas administrativos, páginas web y branding.">
+  <title>Michael Escobar · Dev & Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </noscript>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --bg: #07070d;
+      --surface: #0d0d1a;
+      --card: #12121f;
+      --border: #1e1e35;
+      --purple: #7c3aed;
+      --purple-bright: #a855f7;
+      --purple-dark: #4c1d95;
+      --purple-glow: rgba(124, 58, 237, 0.12);
+      --text: #eeeef5;
+      --text-sec: #8888aa;
+      --text-muted: #555577;
+      --radius: 20px;
+      --radius-sm: 12px;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--purple-dark); border-radius: 3px; }
+
+    /* === SCROLL PROGRESS === */
+    #scrollProgress {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple-dark), var(--purple-bright), #c084fc);
+      z-index: 999;
+      transition: width 0.1s ease;
+    }
+
+    /* === GRAIN TEXTURE === */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* === BACK TO TOP === */
+    #backToTop {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      z-index: 99;
+      width: 44px; height: 44px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-sec);
+      text-decoration: none;
+      font-size: 16px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+    #backToTop.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    #backToTop:hover {
+      background: var(--purple);
+      border-color: var(--purple);
+      color: #fff;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(124,58,237,0.3);
+    }
+
+    /* === LIGHTBOX === */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+      padding: 40px;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+      object-fit: contain;
+      cursor: default;
+      animation: lbFade 0.3s ease;
+    }
+    @keyframes lbFade {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .lightbox .lb-close {
+      position: absolute;
+      top: 24px; right: 28px;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: 0.3s;
+      background: none;
+      border: none;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .lightbox .lb-close:hover { opacity: 1; }
+
+    .p-img { cursor: zoom-in; }
+    .cases img { cursor: zoom-in; }
+
+    @media (max-width: 640px) {
+      .lightbox { padding: 16px; }
+      .lightbox img { max-width: 98vw; max-height: 80vh; }
+      .lightbox .lb-close { top: 12px; right: 16px; font-size: 22px; }
+    }
+
+    /* === ANIMATED BG === */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: var(--purple);
+      top: -200px; right: -150px;
+      animation: orbFloat 12s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: #3b0764;
+      bottom: -150px; left: -100px;
+      animation: orbFloat 16s ease-in-out infinite reverse;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: #1e1b4b;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation: orbFloat 20s ease-in-out infinite;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(40px, -30px) scale(1.05); }
+      66% { transform: translate(-20px, 40px) scale(0.95); }
+    }
+
+    /* === GRID OVERLAY === */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(124, 58, 237, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124, 58, 237, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* === NAV === */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      background: rgba(7, 7, 13, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(30, 30, 53, 0.5);
+    }
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--purple-bright); }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-sec);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links .gh-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 13px;
+      color: var(--text) !important;
+      transition: 0.3s;
+    }
+    .nav-links .gh-link:hover {
+      border-color: var(--purple);
+      background: var(--purple-glow);
+    }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    /* === HERO === */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 140px 0 80px;
+      position: relative;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-left .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      background: rgba(124, 58, 237, 0.06);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 12px;
+      color: var(--purple-bright);
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+    .hero-left .badge .pulse {
+      width: 6px; height: 6px;
+      background: var(--purple-bright);
+      border-radius: 50%;
+      animation: pulseDot 2s ease infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero-left h1 {
+      font-size: 60px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 16px;
+    }
+    .hero-left h1 .outline {
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--text);
+      text-stroke: 1.5px var(--text);
+    }
+    .hero-left h1 .grad {
+      background: linear-gradient(135deg, var(--purple-bright), #c084fc, #e9d5ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-left p {
+      font-size: 16px;
+      color: var(--text-sec);
+      line-height: 1.7;
+      max-width: 440px;
+      margin-bottom: 32px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+    .hero-tags span {
+      padding: 5px 14px;
+      border-radius: 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-sec);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-primary {
+      background: var(--purple);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #6d28d9;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(124, 58, 237, 0.35);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: var(--purple);
+      background: var(--purple-glow);
+      transform: translateY(-3px);
+    }
+
+    /* HERO RIGHT */
+    .hero-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-logo-box {
+      width: 320px;
+      height: 320px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-logo-box .ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(168, 85, 247, 0.15);
+      animation: spin 20s linear infinite;
+    }
+    .hero-logo-box .ring:nth-child(2) {
+      inset: 20px;
+      border-color: rgba(168, 85, 247, 0.08);
+      animation-direction: reverse;
+      animation-duration: 15s;
+    }
+    .hero-logo-box .ring:nth-child(3) {
+      inset: 40px;
+      border-style: dashed;
+      border-color: rgba(168, 85, 247, 0.06);
+      animation-duration: 25s;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .hero-logo-box img {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      position: relative;
+      z-index: 1;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 60px rgba(124, 58, 237, 0.2));
+    }
+    .hero-photo {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      border: 2px solid rgba(168,85,247,0.15);
+      box-shadow: 0 0 60px rgba(124,58,237,0.15);
+    }
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .hero-logo-fallback {
+      display: none;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      font-weight: 700;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* === SECTION HEADER === */
+    .sec-header {
+      margin-bottom: 56px;
+    }
+    .sec-header .num {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--purple-bright);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .sec-header h2 {
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+    }
+    .sec-header h2 .fade {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* === ABOUT / WHAT === */
+    .what {
+      padding: 120px 0;
+    }
+
+    /* === PROJECTS === */
+    .projects {
+      padding: 120px 0;
+    }
+    .proj-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .proj-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .proj-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.03), transparent);
+      opacity: 0;
+      transition: 0.4s;
+    }
+    .proj-card:hover::before { opacity: 1; }
+    .proj-card:hover {
+      border-color: rgba(124, 58, 237, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    .proj-card .p-img {
+      width: 100%;
+      height: 180px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+    .proj-card .p-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .proj-card:hover .p-img img {
+      transform: scale(1.03);
+    }
+    .proj-card .p-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .proj-card .p-icon {
+      width: 40px; height: 40px;
+      background: var(--purple-glow);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--purple-bright);
+      font-size: 16px;
+    }
+    .proj-card .p-links {
+      display: flex;
+      gap: 8px;
+    }
+    .proj-card .p-links a {
+      width: 34px; height: 34px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-sec);
+      text-decoration: none;
+      font-size: 13px;
+      transition: 0.3s;
+    }
+    .proj-card .p-links a:hover {
+      background: var(--purple);
+      border-color: var(--purple);
+      color: #fff;
+    }
+    .proj-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .proj-card .p-role {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--purple-bright);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+    .proj-card p {
+      font-size: 13px;
+      color: var(--text-sec);
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+    .proj-card .p-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .proj-card .p-tech span {
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .proj-card.featured {
+      border-color: rgba(124, 58, 237, 0.2);
+    }
+    .proj-card.featured .badge-proj {
+      position: absolute;
+      top: 20px; right: 20px;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      color: var(--purple-bright);
+      background: rgba(124, 58, 237, 0.08);
+      padding: 3px 10px;
+      border-radius: 50px;
+      z-index: 2;
+    }
+    .proj-card .badge-proj[data-type="sistema"] {
+      background: rgba(34,197,94,0.1);
+      color: #22c55e;
+    }
+
+    /* === CONTACT === */
+    .contact {
+      padding: 120px 0;
+    }
+    .contact-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 56px;
+      text-align: center;
+      max-width: 620px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-box::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, transparent, rgba(124, 58, 237, 0.03), transparent, rgba(124, 58, 237, 0.03), transparent);
+      animation: spin 30s linear infinite;
+    }
+    .contact-box > * { position: relative; z-index: 1; }
+    .contact-box h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .contact-box p {
+      color: var(--text-sec);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .contact-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+    .cl-gh {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .cl-gh:hover {
+      border-color: var(--purple);
+      background: var(--purple-glow);
+      transform: translateY(-2px);
+    }
+    .cl-em {
+      background: var(--purple);
+      color: #fff;
+    }
+    .cl-em:hover {
+      background: #6d28d9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(124, 58, 237, 0.3);
+    }
+
+    /* === FOOTER === */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    footer p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    footer p em { color: var(--purple-bright); font-style: normal; }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 1024px) {
+      .services-showcase { grid-template-columns: 1fr 1fr !important; }
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+      .hero-left p { margin: 0 auto 28px; max-width: 100%; }
+      .hero-tags { justify-content: center; }
+      .hero-actions { justify-content: center; }
+      .hero-left h1 { font-size: 38px; }
+      .hero-logo-box { width: 200px; height: 200px; }
+      .hero-logo-box .hero-photo { width: 140px; height: 140px; }
+      .hero-logo-box .hero-photo img { width: 140px; height: 140px; }
+      .hero-logo-box .ring:nth-child(3) { display: none; }
+      .what { padding: 60px 0; }
+      .about-showcase { grid-template-columns: 1fr !important; }
+      .proj-grid { grid-template-columns: 1fr; }
+      .projects { padding: 60px 0; }
+      .contact { padding: 60px 0; }
+      .cases { padding: 40px 0 !important; }
+    }
+
+    @media (max-width: 640px) {
+      body { font-size: 15px; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        flex-direction: column;
+        background: rgba(7,7,13,0.98);
+        backdrop-filter: blur(24px);
+        padding: 16px 20px;
+        gap: 14px;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: block; }
+      .nav-inner { padding: 12px 16px; }
+
+      .hero { padding: 100px 0 40px; }
+      .hero-left h1 { font-size: 28px; letter-spacing: -0.5px; }
+      .hero-left h1 .outline { -webkit-text-stroke: 1px var(--text); }
+      .hero-left .badge { font-size: 10px; padding: 4px 12px; }
+      .hero-tags span { font-size: 9px; padding: 3px 10px; }
+      .hero-actions { flex-direction: column; align-items: center; gap: 10px; }
+      .hero-actions .btn { width: 100%; justify-content: center; }
+      .hero-logo-box { width: 160px; height: 160px; }
+      .hero-logo-box .hero-photo { width: 110px; height: 110px; }
+      .hero-logo-box .hero-photo img { width: 110px; height: 110px; }
+      .hero-logo-box .ring { display: none; }
+
+      .sec-header { margin-bottom: 32px; }
+      .sec-header h2 { font-size: 24px; }
+
+      .about-showcase > div:first-child { padding: 24px !important; }
+      .about-showcase > div:first-child h3 { font-size: 20px; }
+
+      .services-showcase { grid-template-columns: 1fr !important; gap: 12px !important; }
+      .serv-card { padding: 20px !important; }
+
+      .proj-card { padding: 16px; }
+      .proj-card .p-img { height: 140px; }
+      .proj-card h3 { font-size: 15px; }
+      .proj-card p { font-size: 12px; }
+      .proj-card.featured .badge-proj { top: 12px; right: 12px; font-size: 7px; padding: 2px 8px; }
+      .proj-card .p-tech span { font-size: 8px; padding: 2px 7px; }
+
+      .cases > div > div { grid-template-columns: 1fr !important; gap: 12px !important; }
+
+      .contact-box { padding: 24px 16px; }
+      .contact-box h3 { font-size: 22px; }
+      .contact-form div { grid-template-columns: 1fr !important; }
+      .contact-links a { font-size: 12px; padding: 10px 18px; }
+      .contact-links { gap: 8px; }
+
+      footer p { font-size: 11px; }
+
+      .container { padding: 0 16px; }
+    }
+
+    @media (max-width: 400px) {
+      .hero-left h1 { font-size: 24px; }
+      .hero-logo-box { width: 140px; height: 140px; }
+      .hero-logo-box .hero-photo { width: 100px; height: 100px; }
+      .hero-logo-box .hero-photo img { width: 100px; height: 100px; }
+      .proj-card .p-img { height: 120px; }
+    }
+
+    @media (min-width: 641px) {
+      .nav-links { display: flex !important; }
+    }
+
+    /* === PERFORMANCE: reduce effects on mobile === */
+    @media (max-width: 640px) {
+      .grain { display: none; }
+      .orb { filter: blur(40px); opacity: 0.3; }
+      .orb-1 { width: 200px; height: 200px; }
+      .orb-2 { width: 150px; height: 150px; }
+      .orb-3 { display: none; }
+      .grid-bg { background-size: 30px 30px; }
+      #backToTop { width: 36px; height: 36px; font-size: 13px; bottom: 16px; right: 16px; }
+    }
+
+    /* === REDUCED MOTION === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .aov { opacity: 1; transform: none; }
+    }
+
+    /* === ANIMATE ON VIEW === */
+    .aov {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .aov.vis {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="grid-bg"></div>
+  <div class="grain"></div>
+  <div id="scrollProgress"></div>
+  <a href="#" id="backToTop" title="Volver arriba"><i class="fas fa-arrow-up"></i></a>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">M<span>E</span></a>
+      <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#what">Qué Hago</a></li>
+        <li><a href="#projects">Proyectos</a></li>
+        <li><a href="#contact">Contacto</a></li>
+        <li><a href="https://github.com/VNZMichaelDev" target="_blank" class="gh-link"><i class="fab fa-github"></i> GitHub</a></li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-left aov">
+          <div class="badge"><span class="pulse"></span> Disponible para proyectos</div>
+          <h1>
+            <span class="outline">Michael</span><br>
+            <span class="grad">Escobar</span>
+          </h1>
+          <p>
+            Full-Stack Developer · Diseñador Gráfico · Creación de sistemas administrativos y experiencias digitales completas.
+          </p>
+          <div class="hero-tags">
+            <span>Backend</span>
+            <span>Frontend</span>
+            <span>UI/UX</span>
+            <span>Branding</span>
+            <span>Sistemas</span>
+          </div>
+          <div class="hero-actions">
+            <a href="#projects" class="btn btn-primary"><i class="fas fa-arrow-down"></i> Ver Trabajos</a>
+            <a href="#contact" class="btn btn-ghost"><i class="fas fa-comment"></i> Hablemos</a>
+          </div>
+        </div>
+        <div class="hero-right aov">
+          <div class="hero-logo-box">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="hero-photo">
+              <img src="img/fotomia (1).png" alt="Michael Escobar">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT I DO + ABOUT -->
+  <section class="what" id="what" style="position:relative;">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 0% 50%,rgba(124,58,237,0.03),transparent 60%);pointer-events:none;"></div>
+    <div class="container">
+      <div class="sec-header aov">
+        <div class="num">[01]</div>
+        <h2>Qué Hago <span class="fade">· Sobre Mí</span></h2>
+      </div>
+
+      <!-- about + stats -->
+      <div class="about-showcase aov" style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-bottom:48px;">
+        <div style="background:linear-gradient(135deg,var(--card),var(--surface));border:1px solid var(--border);border-radius:var(--radius);padding:36px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:var(--purple);filter:blur(80px);opacity:0.08;border-radius:50%;"></div>
+          <div class="big-text" style="font-size:12px;font-weight:500;color:var(--purple-bright);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">Michael Escobar</div>
+          <h3 style="font-size:26px;font-weight:700;letter-spacing:-0.5px;line-height:1.2;margin-bottom:16px;">Construyo sistemas<br>que impulsan negocios</h3>
+          <p style="font-size:14px;color:var(--text-sec);line-height:1.8;margin-bottom:12px;">
+            Desarrollo sistemas administrativos a medida, páginas web completas y soluciones digitales 
+            desde el backend hasta el frontend. También creo identidad visual y diseño gráfico para marcas.
+          </p>
+          <p style="font-size:14px;color:var(--text-sec);line-height:1.8;margin-bottom:20px;">
+            Certificado en <strong style="color:var(--text);">Ingeniería de Software</strong> por HackerRank, 
+            con proyectos en producción que van desde marketplaces hasta paneles SMM y sistemas de gestión empresarial.
+          </p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a href="CV-Michael-Escobar.pdf" download class="btn btn-primary" style="font-size:12px;padding:10px 20px;"><i class="fas fa-download"></i> Descargar CV</a>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;display:flex;align-items:center;gap:16px;">
+            <div style="width:44px;height:44px;background:linear-gradient(135deg,var(--purple-dark),var(--purple));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;"><i class="fas fa-certificate"></i></div>
+            <div>
+              <div style="font-size:13px;font-weight:600;">Ingeniería de Software</div>
+              <div style="font-size:11px;color:var(--text-muted);">HackerRank — <span style="color:var(--purple-bright);cursor:pointer;" onclick="window.open('software_engineer certificate.pdf','_blank')">ver certificado →</span></div>
+            </div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;display:flex;align-items:center;gap:16px;">
+            <div style="width:44px;height:44px;background:linear-gradient(135deg,var(--purple-dark),var(--purple));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;"><i class="fas fa-robot"></i></div>
+            <div>
+              <div style="font-size:13px;font-weight:600;">IA para Profesionales de Negocios</div>
+              <div style="font-size:11px;color:var(--text-muted);">Certificación — <span style="color:var(--purple-bright);cursor:pointer;" onclick="window.open('IA para profesionales de negocios.pdf','_blank')">ver certificado →</span></div>
+            </div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;display:flex;align-items:center;gap:16px;">
+            <div style="width:44px;height:44px;background:linear-gradient(135deg,var(--purple-dark),var(--purple));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;"><i class="fas fa-bullhorn"></i></div>
+            <div>
+              <div style="font-size:13px;font-weight:600;">Marketing Digital — Claseflix</div>
+              <div style="font-size:11px;color:var(--text-muted);">Certificación — <span style="color:var(--purple-bright);cursor:pointer;" onclick="window.open('certificado-claseflix marketing.pdf','_blank')">ver certificado →</span></div>
+            </div>
+          </div>
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;display:flex;align-items:center;gap:16px;">
+            <div style="width:44px;height:44px;background:linear-gradient(135deg,var(--purple-dark),var(--purple));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0;"><i class="fas fa-laptop-code"></i></div>
+            <div>
+              <div style="font-size:13px;font-weight:600;">Full-Stack Development</div>
+              <div style="font-size:11px;color:var(--text-muted);">Node.js · Next.js · Flask · bases de datos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- services as horizontal showcase -->
+      <div class="services-showcase" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+        <div class="serv-card aov" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);">
+          <div style="position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--purple-dark),var(--purple-bright),transparent);"></div>
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(168,85,247,0.06));border:1px solid rgba(168,85,247,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--purple-bright);font-size:17px;margin-bottom:16px;"><i class="fas fa-cogs"></i></div>
+          <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;">Sistemas Administrativos a Medida</h4>
+          <p style="font-size:12px;color:var(--text-sec);line-height:1.7;margin-bottom:12px;">Inventarios, facturación, clientes, reportes, control de usuarios — todo adaptado a tu negocio.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">Node.js</span>
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">Flask</span>
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">MySQL</span>
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">PostgreSQL</span>
+          </div>
+        </div>
+        <div class="serv-card aov" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);">
+          <div style="position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--purple-dark),var(--purple-bright),transparent);"></div>
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(168,85,247,0.06));border:1px solid rgba(168,85,247,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--purple-bright);font-size:17px;margin-bottom:16px;"><i class="fas fa-globe"></i></div>
+          <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;">Páginas Web & Aplicaciones</h4>
+          <p style="font-size:12px;color:var(--text-sec);line-height:1.7;margin-bottom:12px;">Landing pages, sitios corporativos, plataformas web, marketplaces y aplicaciones full-stack.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">Next.js</span>
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">React</span>
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">Tailwind</span>
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">Supabase</span>
+          </div>
+        </div>
+        <div class="serv-card aov" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);">
+          <div style="position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--purple-dark),var(--purple-bright),transparent);"></div>
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(168,85,247,0.06));border:1px solid rgba(168,85,247,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--purple-bright);font-size:17px;margin-bottom:16px;"><i class="fas fa-paint-brush"></i></div>
+          <h4 style="font-size:15px;font-weight:600;margin-bottom:8px;">Diseño Gráfico & Branding</h4>
+          <p style="font-size:12px;color:var(--text-sec);line-height:1.7;margin-bottom:12px;">Logotipos, identidad visual, material publicitario, diseño de interfaces y experiencia de usuario.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;">
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">Branding</span>
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">UI/UX</span>
+            <span style="padding:2px 8px;border-radius:3px;background:var(--bg);border:1px solid var(--border);font-size:9px;font-weight:500;color:var(--text-muted);text-transform:uppercase;">Figma</span>
+          </div>
+        </div>
+      </div>
+      <style>
+        .serv-card:hover {
+          transform: translateY(-6px) !important;
+          border-color: rgba(124,58,237,0.3) !important;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+      </style>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="projects" id="projects" style="position:relative;">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 100% 50%,rgba(124,58,237,0.025),transparent 60%);pointer-events:none;"></div>
+    <div class="container">
+      <div class="sec-header aov">
+        <div class="num">[02]</div>
+        <h2>Proyectos <span class="fade">· Realizados</span></h2>
+      </div>
+      <div class="proj-grid">
+
+        <!-- 1. IngWork (con imagen) -->
+        <div class="proj-card featured aov">
+          <span class="badge-proj">Destacado</span>
+          <div class="p-img"><img src="img/construmacht.png" alt="IngWork" loading="lazy"></div>
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-hard-hat"></i></div>
+            <div class="p-links">
+              <a href="https://github.com/VNZMichaelDev/IngWork" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://ingwork-tau.vercel.app/" target="_blank" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <h3>IngWork (ConstruMatch)</h3>
+          <span class="p-role">Marketplace Construcción</span>
+          <p>Marketplace que conecta clientes con profesionales de la construcción. Auth, perfiles, proyectos, chat en tiempo real, calificaciones.</p>
+          <div class="p-tech">
+            <span>Next.js 15</span><span>TypeScript</span><span>Supabase</span><span>Tailwind CSS 4</span><span>App Router</span>
+          </div>
+        </div>
+
+        <!-- 2. Expreso Maju Oriente (con imagen) -->
+        <div class="proj-card aov">
+          <div class="p-img"><img src="img/agencia de envios.png" alt="Expreso Maju Oriente" loading="lazy"></div>
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-truck"></i></div>
+            <div class="p-links">
+              <a href="https://expreso-maju-oriente.vercel.app/" target="_blank" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <h3>Expreso Maju Oriente</h3>
+          <span class="p-role">Rediseño · Agencia de Envíos</span>
+          <p>Rediseño moderno de landing page para agencia de envíos. Diseño responsive enfocado en conversión y confianza.</p>
+          <div class="p-tech">
+            <span>HTML/CSS/JS</span><span>Responsive</span><span>Vercel</span>
+          </div>
+        </div>
+
+        <!-- 3. RifasVE (con imagen) -->
+        <div class="proj-card aov">
+          <div class="p-img"><img src="img/rifasve.png" alt="RifasVE" loading="lazy"></div>
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-ticket-alt"></i></div>
+            <div class="p-links">
+              <a href="https://rifasve.vercel.app/" target="_blank" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <h3>RifasVE</h3>
+          <span class="p-role">Plataforma de Rifas · Venezuela</span>
+          <p>Plataforma web para gestión y venta de rifas. Interfaz limpia con diseño adaptado al público venezolano.</p>
+          <div class="p-tech">
+            <span>HTML/CSS/JS</span><span>Responsive</span><span>Vercel</span>
+          </div>
+        </div>
+
+        <!-- 4. Victoria Design (con imagen) -->
+        <div class="proj-card aov">
+          <div class="p-img"><img src="img/landing para diseñadora.png" alt="Victoria Design" loading="lazy"></div>
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-paint-brush"></i></div>
+            <div class="p-links">
+              <a href="https://github.com/VNZMichaelDev/VictoriaDesing" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://vnzmichaeldev.github.io/VictoriaDesing/" target="_blank" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <h3>Victoria Design</h3>
+          <span class="p-role">Landing · Diseñadora Gráfica</span>
+          <p>Landing page profesional para diseñadora gráfica con portafolio visual y galería de trabajos.</p>
+          <div class="p-tech">
+            <span>HTML/CSS/JS</span><span>GitHub Pages</span><span>Responsive</span>
+          </div>
+        </div>
+
+        <!-- 5. Volarix Capital (con imagen) -->
+        <div class="proj-card aov">
+          <div class="p-img"><img src="img/copy tranding.png" alt="Volarix Capital" loading="lazy"></div>
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-chart-bar"></i></div>
+            <div class="p-links">
+              <a href="https://github.com/VNZMichaelDev/VolarixCapital" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://volarix-capital.vercel.app/" target="_blank" title="Demo"><i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <h3>Volarix Capital</h3>
+          <span class="p-role">Landing · Copy Trading</span>
+          <p>Landing page corporativa para empresa de copy trading. Diseño enfocado en profesionalismo y conversión.</p>
+          <div class="p-tech">
+            <span>HTML/CSS/JS</span><span>Responsive</span><span>Vercel</span>
+          </div>
+        </div>
+
+        <!-- 6. Sistema Restaurantes (admins) -->
+        <div class="proj-card featured aov">
+          <span class="badge-proj">Sistema</span>
+          <div class="p-img"><img src="img/sistema restaurante.png" alt="Sistema Restaurantes" loading="lazy"></div>
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-utensils"></i></div>
+            <div class="p-links">
+              <a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20una%20demo%20del%20sistema%20para%20RESTAURANTES" target="_blank" title="Solicitar Demo"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+          <h3>Sistema Restaurantes</h3>
+          <span class="p-role">Admin · Multi-sucursal</span>
+          <p><strong style="color:var(--text);">Toma pedidos</strong> desde una app personalizada que se envía directo a la cocina (laptop o celular). <strong style="color:var(--text);">Facturación</strong> integrada, roles de personal, múltiples sucursales conectadas, reportes en tiempo real por categorías y ganancias. Conversión <strong style="color:var(--text);">$ ↔ Bs</strong>.</p>
+          <div style="margin-top:14px;">
+            <a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20una%20demo%20del%20sistema%20para%20RESTAURANTES" target="_blank" class="btn btn-primary" style="font-size:12px;padding:10px 20px;"><i class="fab fa-whatsapp"></i> Solicitar Demo</a>
+          </div>
+          <div class="p-tech" style="margin-top:12px;">
+            <span>App Móvil</span><span>Web</span><span>Multi-sucursal</span><span>Roles</span><span>Reportes</span>
+          </div>
+        </div>
+
+        <!-- 7. Sistema Panadería (admins) -->
+        <div class="proj-card featured aov">
+          <span class="badge-proj">Sistema</span>
+          <div class="p-img"><img src="img/panaderia sistema.png" alt="Sistema Panadería" loading="lazy"></div>
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-bread-slice"></i></div>
+            <div class="p-links">
+              <a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20una%20demo%20del%20sistema%20para%20PANADERÍA" target="_blank" title="Solicitar Demo"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+          <h3>Sistema Panadería</h3>
+          <span class="p-role">Admin · Inventario + Ventas</span>
+          <p><strong style="color:var(--text);">Administra venta e inventario</strong> de panadería más productos adicionales (queso, etc.). Facturación profesional, control de múltiples sucursales, roles de personal y <strong style="color:var(--text);">reportes en tiempo real</strong> con detalles por categorías, ganancias y total de ventas. Conversión <strong style="color:var(--text);">$ ↔ Bs</strong>.</p>
+          <div style="margin-top:14px;">
+            <a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20una%20demo%20del%20sistema%20para%20PANADERÍA" target="_blank" class="btn btn-primary" style="font-size:12px;padding:10px 20px;"><i class="fab fa-whatsapp"></i> Solicitar Demo</a>
+          </div>
+          <div class="p-tech" style="margin-top:12px;">
+            <span>Web</span><span>Multi-sucursal</span><span>Inventario</span><span>Facturación</span><span>Reportes</span>
+          </div>
+        </div>
+
+        <!-- 8. Comestibles FH (Android) -->
+        <div class="proj-card featured aov">
+          <span class="badge-proj">App</span>
+          <div class="p-img"><img src="img/comestibles fh.jpeg" alt="Comestibles FH" loading="lazy"></div>
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-mobile-alt"></i></div>
+            <div class="p-links">
+              <a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20informaci%C3%B3n%20sobre%20Comestibles%20FH" target="_blank" title="Información"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+          <h3>Comestibles FH</h3>
+          <span class="p-role">App Android · Inventario + Ventas</span>
+          <p><strong style="color:var(--text);">Problema:</strong> Pequeño negocio de tostones manejaba ventas y fiado en cuaderno, se sobrecargaba y a veces olvidaban anotar. Sin control de inventario ni reportes. <strong style="color:var(--text);">Solución:</strong> App Android con SQLite local, gestión de inventario, ventas, fiado y reportes diarios con filtro por fechas. <strong style="color:var(--text);">Resultado:</strong> Control total de ventas y fiado, sin pérdidas de datos, reportes al instante.</p>
+          <div style="margin-top:14px;">
+            <a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20informaci%C3%B3n%20sobre%20Comestibles%20FH" target="_blank" class="btn btn-primary" style="font-size:12px;padding:10px 20px;"><i class="fab fa-whatsapp"></i> Solicitar Información</a>
+          </div>
+          <div class="p-tech" style="margin-top:12px;">
+            <span>Android</span><span>SQLite</span><span>Java/Kotlin</span><span>Inventario</span><span>Fiado</span><span>Reportes</span>
+          </div>
+        </div>
+
+        <!-- 9. Sistema Carnicería (admins) -->
+        <div class="proj-card featured aov">
+          <span class="badge-proj">Sistema</span>
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-drumstick-bite"></i></div>
+            <div class="p-links">
+              <a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20una%20demo%20del%20sistema%20para%20CARNICERÍA" target="_blank" title="Solicitar Demo"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+          <h3>Sistema Carnicería</h3>
+          <span class="p-role">Admin · Control de Stock + Ventas</span>
+          <p><strong style="color:var(--text);">Gestión completa</strong> de inventario de carnes, ventas por peso/precio, múltiples sucursales conectadas, roles de personal y <strong style="color:var(--text);">reportes en tiempo real</strong>. Facturación con conversión <strong style="color:var(--text);">$ ↔ Bs</strong> y control detallado de ganancias por categoría.</p>
+          <div style="margin-top:14px;">
+            <a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20una%20demo%20del%20sistema%20para%20CARNICERÍA" target="_blank" class="btn btn-primary" style="font-size:12px;padding:10px 20px;"><i class="fab fa-whatsapp"></i> Solicitar Demo</a>
+          </div>
+          <div class="p-tech" style="margin-top:12px;">
+            <span>Web</span><span>Multi-sucursal</span><span>Stock</span><span>Facturación</span><span>Reportes</span>
+          </div>
+        </div>
+
+        <!-- 10. FollowerPro (sin imagen) -->
+        <div class="proj-card aov">
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="p-links">
+              <a href="https://github.com/VNZMichaelDev/FollowerPro" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3>FollowerPro</h3>
+          <span class="p-role">Panel SMM Profesional</span>
+          <p><strong style="color:var(--text);">Problema:</strong> Clientes SMM necesitaban gestionar servicios de redes sociales sin depender de múltiples plataformas. <strong style="color:var(--text);">Proceso:</strong> Desarrollé un panel con dashboard en tiempo real, catálogo dinámico y creación de órdenes conectado a SMMCoder API. <strong style="color:var(--text);">Resultado:</strong> Sistema funcional con estadísticas, balance en vivo y panel administrativo completo.</p>
+          <div class="p-tech">
+            <span>Node.js</span><span>Express</span><span>MySQL</span><span>Axios</span><span>CSS Grid/Flexbox</span>
+          </div>
+        </div>
+
+        <!-- 11. GymSystem (sin imagen) -->
+        <div class="proj-card aov">
+          <div class="p-top">
+            <div class="p-icon"><i class="fas fa-dumbbell"></i></div>
+            <div class="p-links">
+              <a href="https://github.com/VNZMichaelDev/Gymsystem" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3>GET FIT — Gym System</h3>
+          <span class="p-role">Sistema Gestión de Gimnasios</span>
+          <p>CRUD de clientes, membresías, pagos con comprobantes, asistencias, 12+ reportes analíticos, API REST con 40+ endpoints.</p>
+          <div class="p-tech">
+            <span>Flask</span><span>SQLAlchemy</span><span>PostgreSQL</span><span>JWT</span><span>HTML/JS/CSS</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BUSINESS CASES -->
+  <section class="cases" style="padding:80px 0;">
+    <div class="container">
+      <div class="sec-header aov">
+        <div class="num">—</div>
+        <h2>Casos <span class="fade">de Éxito</span></h2>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+        <div class="aov" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:0.4s;">
+          <div style="width:100%;height:180px;overflow:hidden;background:var(--bg);">
+            <img src="img/restauran exito.jpeg" alt="Restaurante" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+          </div>
+          <div style="padding:24px 28px 28px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+              <div style="width:38px;height:38px;background:var(--purple-glow);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--purple-bright);font-size:15px;"><i class="fas fa-utensils"></i></div>
+              <h3 style="font-size:16px;font-weight:600;">Restaurante</h3>
+            </div>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;"><strong style="color:var(--text);">Problema:</strong> Restaurante con múltiples sucursales sin sistema centralizado. Pedidos se perdían en papel, cocina no recibía órdenes en tiempo real y no había reportes de ventas.</p>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;"><strong style="color:var(--text);">Solución:</strong> App de pedidos personalizada conectada a una terminal en cocina. Sistema multi-sucursal con roles de personal, facturación integrada y conversión $ ↔ Bs.</p>
+            <p style="font-size:12px;color:var(--text-muted);"><strong style="color:var(--text);">Resultado:</strong> Pedidos digitales sin pérdidas, cocina organizada, reportes en tiempo real por sucursal y categoría.</p>
+          </div>
+        </div>
+
+        <div class="aov" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:0.4s;">
+          <div style="width:100%;height:180px;overflow:hidden;background:var(--bg);">
+            <img src="img/panaderia exito.jpeg" alt="Panadería El Maná" style="width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+          </div>
+          <div style="padding:24px 28px 28px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+              <div style="width:38px;height:38px;background:var(--purple-glow);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--purple-bright);font-size:15px;"><i class="fas fa-store"></i></div>
+              <h3 style="font-size:16px;font-weight:600;">Panadería El Maná</h3>
+            </div>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;"><strong style="color:var(--text);">Problema:</strong> Control de inventario y ventas en hojas de cálculo. Sin registro de productos adicionales (queso, etc.), facturación lenta y sin reportes.</p>
+            <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;"><strong style="color:var(--text);">Solución:</strong> Sistema administrativo con inventario de panadería + productos extras, facturación profesional, multi-sucursal y reportes detallados por categoría con conversión $ ↔ Bs.</p>
+            <p style="font-size:12px;color:var(--text-muted);"><strong style="color:var(--text);">Resultado:</strong> Control total del negocio, facturación ágil, reportes en tiempo real de ventas y ganancias.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <style>
+      .cases > div > div > div:hover {
+        border-color: var(--purple) !important;
+        transform: translateY(-3px);
+      }
+    </style>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact" style="position:relative;">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(124,58,237,0.04),transparent 60%);pointer-events:none;"></div>
+    <div class="container">
+      <div class="sec-header aov">
+        <div class="num">[03]</div>
+        <h2>Contacto <span class="fade">· Trabajemos</span></h2>
+      </div>
+      <div class="contact-box aov">
+        <h3>¿Tienes un proyecto?</h3>
+        <p>Sistemas administrativos, páginas web, branding — lo que necesites, hablemos.</p>
+        <form class="contact-form" action="#" method="POST" onsubmit="alert('Gracias por tu mensaje, te responderé pronto.');this.reset();return false;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <input type="text" placeholder="Tu nombre" required style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;transition:0.3s;">
+            <input type="email" placeholder="Tu correo" required style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;transition:0.3s;">
+          </div>
+          <textarea placeholder="Cuéntame sobre tu proyecto..." rows="4" required style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 16px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;transition:0.3s;resize:vertical;margin-bottom:14px;"></textarea>
+          <button type="submit" class="btn btn-primary" style="border:none;cursor:pointer;font-size:14px;"><i class="fas fa-paper-plane"></i> Enviar Mensaje</button>
+        </form>
+        <style>
+          .contact-form input:focus, .contact-form textarea:focus { border-color: var(--purple) !important; }
+        </style>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+          <a href="https://github.com/VNZMichaelDev" target="_blank" class="cl-gh"><i class="fab fa-github"></i> GitHub</a>
+          <a href="mailto:Elixirwebstudio@gmail.com" class="cl-em"><i class="fas fa-envelope"></i> Elixirwebstudio@gmail.com</a>
+          <a href="https://api.whatsapp.com/send?phone=584245851434" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;text-decoration:none;font-size:14px;font-weight:500;transition:0.3s;background:#22c55e;color:#fff;"><i class="fab fa-whatsapp"></i> +58 4245851434</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Michael Escobar · <em>Full-Stack Developer</em> · <em>Diseñador Gráfico</em></p>
+    </div>
+  </footer>
+
+  <script>
+    // lightbox
+    var lb = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lightboxImg');
+    function openLightbox(src) { lbImg.src = src; lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeLightbox() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
+    document.querySelectorAll('.p-img img, .cases img').forEach(function(img) {
+      img.addEventListener('click', function(e) { e.stopPropagation(); openLightbox(this.src); });
+    });
+
+    // nav toggle
+    document.getElementById('navToggle').addEventListener('click', function() {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+    document.querySelectorAll('#navLinks a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        document.getElementById('navLinks').classList.remove('open');
+      });
+    });
+
+    // scroll: nav close + progress + back to top
+    var progress = document.getElementById('scrollProgress');
+    var backTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', function() {
+      document.getElementById('navLinks').classList.remove('open');
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      var p = (window.scrollY / h) * 100;
+      progress.style.width = p + '%';
+      if (window.scrollY > 400) { backTop.classList.add('show'); } else { backTop.classList.remove('show'); }
+    });
+    backTop.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // animate on view
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) e.target.classList.add('vis');
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.aov').forEach(function(el) { observer.observe(el); });
+  </script>
+
+</body>
+</html>

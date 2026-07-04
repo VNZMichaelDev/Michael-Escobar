@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV - Michael Escobar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f5f0;
+      color: #1a1a1a;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+      line-height: 1.5;
+    }
+    .cv {
+      max-width: 1000px;
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .cv-inner {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      background: #111;
+      color: #ccc;
+      padding: 40px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .sidebar .name {
+      text-align: center;
+    }
+    .sidebar .photo-wrap {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 16px;
+      border: 3px solid rgba(168,85,247,0.3);
+      box-shadow: 0 0 30px rgba(168,85,247,0.15);
+    }
+    .sidebar .photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .sidebar .name h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .sidebar .name .role {
+      font-size: 11px;
+      font-weight: 500;
+      color: #a855f7;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 4px;
+    }
+    .sidebar .divider {
+      width: 40px;
+      height: 2px;
+      background: #a855f7;
+      margin: 0 auto;
+      border-radius: 1px;
+    }
+    .sidebar-section h3 {
+      font-size: 10px;
+      font-weight: 600;
+      color: #a855f7;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .sidebar-section .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .sidebar-section .contact-item i {
+      width: 16px;
+      color: #a855f7;
+      font-size: 13px;
+    }
+    .sidebar-section .contact-item a {
+      color: #aaa;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .sidebar-section .contact-item a:hover { color: #fff; }
+    .skill-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 10px;
+      font-weight: 500;
+      color: #bbb;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin: 2px;
+    }
+    .sidebar-section .cert-item {
+      font-size: 12px;
+      color: #bbb;
+      margin-bottom: 10px;
+      padding-left: 14px;
+      border-left: 2px solid #a855f7;
+    }
+    .sidebar-section .cert-item strong {
+      color: #fff;
+      font-weight: 600;
+      display: block;
+      font-size: 13px;
+    }
+
+    /* === MAIN === */
+    .main {
+      padding: 40px 36px;
+    }
+    .main-section {
+      margin-bottom: 28px;
+    }
+    .main-section h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .main-section h2::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e0e0e0;
+    }
+    .main-section p {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.7;
+    }
+    .project-item {
+      margin-bottom: 18px;
+    }
+    .project-item h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 2px;
+    }
+    .project-item .tech {
+      font-size: 10px;
+      font-weight: 500;
+      color: #a855f7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .project-item p {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .service-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .service-card {
+      background: #f8f6f2;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    .service-card i {
+      font-size: 20px;
+      color: #a855f7;
+      margin-bottom: 8px;
+    }
+    .service-card h4 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 4px;
+    }
+    .service-card p {
+      font-size: 10px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    @media print {
+      body { padding: 0; background: #fff; }
+      .cv { box-shadow: none; border-radius: 0; max-width: 100%; }
+      .cv-inner { grid-template-columns: 280px 1fr; }
+      .btn-wrap { display: none !important; }
+      .sidebar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .sidebar .photo-wrap { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .photo-wrap img { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      @page { margin: 0; size: A4; }
+    }
+
+    @media (max-width: 768px) {
+      .cv-inner { grid-template-columns: 1fr; }
+      .sidebar { padding: 28px 20px; }
+      .main { padding: 28px 20px; }
+      .service-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .service-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cv">
+    <div class="cv-inner">
+
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="name">
+          <div class="photo-wrap">
+            <img src="img/fotomia (1).png" alt="Michael Escobar">
+          </div>
+          <h1>Michael Escobar</h1>
+          <div class="role">Full-Stack Developer · Diseñador Gráfico</div>
+        </div>
+        <div class="divider"></div>
+
+        <div class="sidebar-section">
+          <h3>Contacto</h3>
+          <div class="contact-item"><i class="fas fa-phone"></i> +58 4245851434</div>
+          <div class="contact-item"><i class="fas fa-envelope"></i> Elixirwebstudio@gmail.com</div>
+          <div class="contact-item"><i class="fab fa-github"></i> <a href="https://github.com/VNZMichaelDev" target="_blank">/VNZMichaelDev</a></div>
+          <div class="contact-item"><i class="fas fa-globe"></i> <a href="#" target="_blank">Portfolio Online</a></div>
+          <div class="contact-item"><i class="fas fa-map-marker-alt"></i> Venezuela</div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Tecnologías</h3>
+          <div>
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">Express</span>
+            <span class="skill-tag">Flask</span>
+            <span class="skill-tag">Next.js</span>
+            <span class="skill-tag">TypeScript</span>
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">Tailwind CSS</span>
+            <span class="skill-tag">MySQL</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">SQLite</span>
+            <span class="skill-tag">Supabase</span>
+            <span class="skill-tag">HTML/CSS/JS</span>
+            <span class="skill-tag">JWT</span>
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">Figma</span>
+            <span class="skill-tag">Android</span>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>Certificaciones</h3>
+          <div class="cert-item">
+            <strong>Ingeniería de Software</strong>
+            HackerRank — Certificación oficial
+          </div>
+          <div class="cert-item">
+            <strong>IA para Profesionales de Negocios</strong>
+            Certificación profesional
+          </div>
+          <div class="cert-item">
+            <strong>Marketing Digital — Claseflix</strong>
+            Certificación profesional
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN -->
+      <div class="main">
+
+        <div class="main-section">
+          <h2>Perfil Profesional</h2>
+          <p>
+            Desarrollador full-stack y diseñador gráfico especializado en crear sistemas administrativos a medida, 
+            aplicaciones web completas y experiencias digitales. Con experiencia en proyectos que van desde paneles SMM 
+            profesionales hasta marketplaces complejos y sistemas de gestión empresarial. Apasionado por construir 
+            soluciones que impulsan negocios, combinando backend robusto con frontend intuitivo y diseño de calidad.
+          </p>
+        </div>
+
+        <div class="main-section">
+          <h2>Servicios</h2>
+          <div class="service-grid">
+            <div class="service-card">
+              <i class="fas fa-cogs"></i>
+              <h4>Sistemas Administrativos</h4>
+              <p>Inventarios, facturación, clientes, reportes, multi-sucursal, roles y conversión $ ↔ Bs. Para restaurantes, panaderías y carnicerías.</p>
+            </div>
+            <div class="service-card">
+              <i class="fas fa-globe"></i>
+              <h4>Páginas Web & Apps</h4>
+              <p>Landing pages, marketplaces, plataformas full-stack, apps Android con SQLite local.</p>
+            </div>
+            <div class="service-card">
+              <i class="fas fa-paint-brush"></i>
+              <h4>Diseño Gráfico & Branding</h4>
+              <p>Logotipos, identidad visual, UI/UX, material publicitario y diseño de interfaces.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="main-section">
+          <h2>Proyectos Destacados</h2>
+
+          <div class="project-item">
+            <h3><a href="https://ingwork-tau.vercel.app/" target="_blank" style="color:#111;text-decoration:none;">IngWork (ConstruMatch) <i class="fas fa-external-link-alt" style="font-size:10px;color:#a855f7;"></i></a></h3>
+            <span class="tech">Next.js 15 · TypeScript · Supabase · Tailwind CSS 4</span>
+            <p>Marketplace para conectar clientes con profesionales de la construcción. Autenticación, perfiles, proyectos, chat en tiempo real y sistema de calificaciones.</p>
+          </div>
+
+          <div class="project-item">
+            <h3><a href="https://github.com/VNZMichaelDev/FollowerPro" target="_blank" style="color:#111;text-decoration:none;">FollowerPro — Panel SMM <i class="fas fa-external-link-alt" style="font-size:10px;color:#a855f7;"></i></a></h3>
+            <span class="tech">Node.js · Express · MySQL · Axios</span>
+            <p>Panel SMM profesional conectado a SMMCoder API con dashboard en tiempo real, catálogo dinámico de servicios, creación de órdenes y estadísticas.</p>
+          </div>
+
+          <div class="project-item">
+            <h3><a href="https://github.com/VNZMichaelDev/Gymsystem" target="_blank" style="color:#111;text-decoration:none;">GET FIT — Gym Management System <i class="fas fa-external-link-alt" style="font-size:10px;color:#a855f7;"></i></a></h3>
+            <span class="tech">Flask · SQLAlchemy · PostgreSQL · JWT</span>
+            <p>Sistema completo de gestión de gimnasios con CRUD de clientes, membresías, pagos, asistencias, 12+ reportes analíticos y API REST con 40+ endpoints.</p>
+          </div>
+
+          <div class="project-item">
+            <h3><a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20informaci%C3%B3n%20sobre%20los%20SISTEMAS%20ADMINISTRATIVOS" target="_blank" style="color:#111;text-decoration:none;">Sistemas Administrativos <i class="fab fa-whatsapp" style="font-size:12px;color:#22c55e;"></i></a></h3>
+            <span class="tech">Node.js · Flask · MySQL · PostgreSQL</span>
+            <p>Sistemas para restaurantes (app de pedidos + cocina), panaderías (inventario + ventas + productos), carnicerías (stock por peso/precio). Multi-sucursal, roles, reportes en tiempo real y conversión $ ↔ Bs.</p>
+          </div>
+
+          <div class="project-item">
+            <h3><a href="https://api.whatsapp.com/send?phone=584245851434&text=Quiero%20informaci%C3%B3n%20sobre%20Comestibles%20FH" target="_blank" style="color:#111;text-decoration:none;">Comestibles FH — App Android <i class="fab fa-whatsapp" style="font-size:12px;color:#22c55e;"></i></a></h3>
+            <span class="tech">Android · SQLite · Java/Kotlin</span>
+            <p>App con base de datos local para gestión de inventario, ventas, fiado y reportes diarios con filtro por fechas. Desarrollada para pequeños negocios.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="btn-wrap" style="text-align:center;padding:20px;background:#f8f6f2;">
+      <button onclick="window.print()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:50px;border:none;background:#111;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:0.3s;">
+        <i class="fas fa-download"></i> Descargar CV (PDF)
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.btn-wrap button').addEventListener('click', function() {
+      window.print();
+    });
+  </script>
+</body>
+</html>
