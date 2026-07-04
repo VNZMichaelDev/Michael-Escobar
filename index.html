@@ -751,18 +751,18 @@
       .hero-grid {
         display: flex;
         flex-direction: column;
+        align-items: center;
         text-align: center;
       }
-      .hero-grid .hero-left {
-        display: flex;
-        flex-direction: column;
+      .hero-left {
+        display: contents;
       }
-      .hero-grid .hero-left .badge { order: 1; margin-bottom: 16px; }
-      .hero-grid .hero-right { order: 2; margin-bottom: 16px; }
-      .hero-grid .hero-left h1 { order: 3; }
-      .hero-grid .hero-left p { order: 4; margin: 12px auto 28px; max-width: 100%; }
-      .hero-grid .hero-left .hero-tags { order: 5; justify-content: center; }
-      .hero-grid .hero-left .hero-actions { order: 6; justify-content: center; }
+      .hero-left .badge { order: 1; margin-bottom: 16px; }
+      .hero-right { order: 2; margin-bottom: 24px; }
+      .hero-left h1 { order: 3; }
+      .hero-left p { order: 4; margin: 12px auto 28px; max-width: 100%; }
+      .hero-left .hero-tags { order: 5; justify-content: center; }
+      .hero-left .hero-actions { order: 6; justify-content: center; }
       .hero-left h1 { font-size: 40px; }
       .hero-logo-box { width: 240px; height: 240px; }
       .hero-logo-box .hero-photo { width: 170px; height: 170px; }
@@ -796,15 +796,13 @@
       .nav-inner { padding: 12px 16px; }
 
       .hero { padding: 100px 0 40px; }
-      .hero-grid .hero-left .badge { order: 1; margin-bottom: 12px; }
-      .hero-grid .hero-right { order: 2; margin-bottom: 12px; }
-      .hero-grid .hero-left h1 { order: 3; }
-      .hero-grid .hero-left p { order: 4; }
-      .hero-grid .hero-left .hero-tags { order: 5; }
-      .hero-grid .hero-left .hero-actions { order: 6; }
-      .hero-left h1 { font-size: 32px; letter-spacing: -0.5px; }
+      .hero-left .badge { order: 1; margin-bottom: 12px; font-size: 10px; padding: 4px 12px; }
+      .hero-right { order: 2; margin-bottom: 16px; }
+      .hero-left h1 { order: 3; font-size: 32px; letter-spacing: -0.5px; }
       .hero-left h1 .outline { -webkit-text-stroke: 1px var(--text); }
-      .hero-left .badge { font-size: 10px; padding: 4px 12px; }
+      .hero-left p { order: 4; }
+      .hero-left .hero-tags { order: 5; }
+      .hero-left .hero-actions { order: 6; }
       .hero-tags span { font-size: 9px; padding: 3px 10px; }
       .hero-actions { flex-direction: column; align-items: center; gap: 10px; }
       .hero-actions .btn { width: 100%; justify-content: center; }
